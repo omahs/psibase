@@ -88,7 +88,7 @@ Then it knows how to compile the contract and get it deployed locally on a local
 
 Finally, the contract function is called with `program.methods.initialize().rpc()` and the test can process the result.
 
-## Complex Examples
+### Complex Examples
 
 - [Swap DEX](https://github.com/project-serum/swap/blob/master/programs/swap/src/lib.rs): this is an example of contract that perform instantly settled token swaps on the Serum DEX; it uses the `anchor-lang` lib and it's just a single long file with a few methods.
 
