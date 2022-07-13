@@ -93,3 +93,116 @@ Finally, the contract function is called with `program.methods.initialize().rpc(
 - [Swap DEX](https://github.com/project-serum/swap/blob/master/programs/swap/src/lib.rs): this is an example of contract that perform instantly settled token swaps on the Serum DEX; it uses the `anchor-lang` lib and it's just a single long file with a few methods.
 
 - [Serum DEX](https://github.com/project-serum/serum-dex/blob/master/dex/src/lib.rs): this is the full Serum DEX code, it uses the raw `solana_program`. It has multiple files and you can see how they manually implement the [dispatch function here](https://github.com/project-serum/serum-dex/blob/master/dex/src/state.rs#L2556).
+
+## NEAR protocol
+
+I would like to give a big props to their simple smartcontract repo with has good instructions, readme examples and enough information to bootstrap, build and test their sdk. You can find it here: https://github.com/near/near-sdk-rs
+
+### Basics
+
+This a simple contract that sets and gets data:
+
+```rs
+use std::collections::HashMap;
+
+use near_sdk::{
+    borsh::{self, BorshDeserialize, BorshSerialize},
+    near_bindgen,
+};
+
+#[near_bindgen]
+#[derive(Default, BorshSerialize, BorshDeserialize)]
+pub struct MyContract {
+    data: HashMap<u64, u64>,
+}
+
+#[near_bindgen]
+impl MyContract {
+    pub fn insert_data(&mut self, key: u64, value: u64) -> Option<u64> {
+        self.data.insert(key, value)
+    }
+    pub fn get_data(&self, key: u64) -> Option<u64> {
+        self.data.get(&key).cloned()
+    }
+}
+```
+
+They wrap the contract in a `pub struct` as opposed of our `pub mod`.
+
+Looking in their generated WAT they don't have an exposed entry point. They actually export all the contract methods as functions.
+
+This is their base `Cargo.toml` definition:
+
+```toml
+[package]
+name = "mynearproj"
+version = "0.1.0"
+edition = "2021"
+
+[lib]
+crate-type = ["cdylib"]
+
+[dependencies]
+near-sdk = "4.0.0"
+
+[profile.release]
+codegen-units = 1
+# Tell `rustc` to optimize for small code size.
+opt-level = "z"
+lto = true
+debug = false
+panic = "abort"
+```
+
+The only dependency is the `near-sdk` package.
+
+Interesting how they have these `profile.release`, especially the `panic = "abort"` one. I wonder if we can do that too and if it's behaves as expected.
+
+The expanded contract code can be seen here: [near-expanded.rs](./near-expanded.rs)
+
+Interesting points from their docs:
+
+## Testing
+
+I didn't dive into the boilerplate and deployment tooling since I after writing that for solana above I fell it was a little out of scope or too much, when the focus should be comparing rust sdks.
+
+In terms of testing they are super simple and everything can be done inside rust:
+
+```rs
+#[test]
+fn set_get_message() {
+    let context = get_context(vec![]);
+    testing_env!(context);
+    let mut contract = StatusMessage::default();
+    contract.set_status("hello".to_string());
+    assert_eq!("hello".to_string(), contract.get_status("bob_near".to_string()).unwrap());
+}
+```
+
+Run unit test the usual rust way:
+
+```sh
+cargo test --package status-message
+```
+
+The context object (`VMContext`) allow setting things such as the block time, so I imagine it's used to advance blocks through tests. Although I didn't dive into that, but it seems a pretty effective way of testing inside rust!
+
+## Polkadot
+
+Their own docs states this:
+
+> It is still early for smart contracts on Polkadot and the development is only now stabilizing.
+
+They actually encourage creating **runtimes** which is code that modifies the chain nodes execution behavior. They stay integrated through IBC via their **parachain** concept.
+
+Their biggest platforms actually use EVM contracts, their framework is called Frontier.
+
+In terms of Rust frameworks, this is what I found:
+
+- Ink! framework - found one big project that migrated to Gear: https://github.com/zenlinkpro/zenlink-wasm-v1
+
+- Gear framework - could not find any production project built on it. Here's a lottery example: https://github.com/gear-dapps/lottery/blob/master/src/lib.rs
+
+## Other Rust SmartContract SDKs
+
+I glanced over other blockchains that offers rust sdk to write smart contracts. Ethereum had a Rust SDK but it seems like it was discontinued, probably the market is happy with the solidity ecosystem. There are chains such as SUI and Ethereum/FE lang which offers a rusty kind of lang to build contracts -- they look like rust based langs with more sugar on it enabled by macros.
