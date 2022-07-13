@@ -162,7 +162,7 @@ The expanded contract code can be seen here: [near-expanded.rs](./near-expanded.
 
 Interesting points from their docs:
 
-## Testing
+### Testing
 
 I didn't dive into the boilerplate and deployment tooling since I after writing that for solana above I fell it was a little out of scope or too much, when the focus should be comparing rust sdks.
 
@@ -186,6 +186,10 @@ cargo test --package status-message
 ```
 
 The context object (`VMContext`) allow setting things such as the block time, so I imagine it's used to advance blocks through tests. Although I didn't dive into that, but it seems a pretty effective way of testing inside rust!
+
+### Complex Examples
+
+[Ref.finance DEX](https://github.com/ref-finance/ref-contracts) - great example of a full DEX implemented using the near-sdk.
 
 ## Polkadot
 
