@@ -1,2 +1,3 @@
 [workspace]
-members = ["account_sys", "fracpack", "test_fracpack", "test_contract", "libpsibase", "psi_macros", "psibase", "gen-cpp-doc"]
+members = ["fracpack", "test_fracpack", "libpsibase", "psi_macros", "psibase", "gen-cpp-doc"]
+exclude = ["contracts"]
