@@ -5,8 +5,8 @@
 #include <psibase/MethodNumber.hpp>
 #include <psibase/testUtils.hpp>
 
+#include "contracts/user/RSymbolSys.hpp"
 #include "contracts/user/RTokenSys.hpp"
-#include "contracts/user/SymbolSys.hpp"
 #include "contracts/user/TokenSys.hpp"
 
 using namespace psibase;
@@ -23,7 +23,8 @@ namespace
        {TokenSys::contract, "TokenSys.wasm"},
        {NftSys::contract, "NftSys.wasm"},
        {SymbolSys::contract, "SymbolSys.wasm"},
-       {RTokenSys::contract, "RTokenSys.wasm"}};
+       {RTokenSys::contract, "RTokenSys.wasm"},
+       {RSymbolSys::contract, "RSymbolSys.wasm"}};
 }  // namespace
 
 SCENARIO("Testing default psibase chain")
@@ -33,6 +34,11 @@ SCENARIO("Testing default psibase chain")
    auto        tokenSysRpc = t.as(RTokenSys::contract).at<RTokenSys>();
    std::string rpcUiDir    = "../contracts/user/TokenSys/ui/";
    tokenSysRpc.storeSys("/ui/index.js", "text/javascript", readWholeFile(rpcUiDir + "index.js"));
+
+   auto        symbolSysRpc   = t.as(RSymbolSys::contract).at<RSymbolSys>();
+   std::string symbolRpcUiDir = "../contracts/user/SymbolSys/ui/";
+   symbolSysRpc.storeSys("/ui/index.js", "text/javascript",
+                         read_whole_file(symbolRpcUiDir + "index.js"));
 
    auto alice = t.as(t.add_account("alice"_a));
    auto bob   = t.as(t.add_account("bob"_a));

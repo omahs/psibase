@@ -217,19 +217,16 @@ SymbolRecord SymbolSys::getSymbol(SID symbol)
    }
 }
 
-Quantity SymbolSys::getPrice(size_t numChars)
+Quantity SymbolSys::getPrice(uint8_t numChars)
 {
    return getSymbolType(numChars).activePrice;
 }
 
-SymbolLengthRecord SymbolSys::getSymbolType(size_t numChars)
+SymbolLengthRecord SymbolSys::getSymbolType(uint8_t numChars)
 {
-   check(canCast<uint8_t>(numChars), invalidSymbol);
-   auto key = static_cast<uint8_t>(numChars);
-
    updatePrices();
 
-   auto symbolType = db.open<SymbolLengthTable>().getIndex<0>().get(key);
+   auto symbolType = db.open<SymbolLengthTable>().getIndex<0>().get(numChars);
    check(symbolType.has_value(), invalidSymbol);
 
    return *symbolType;

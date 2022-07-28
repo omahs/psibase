@@ -1,5 +1,6 @@
 function(add suffix)
     add_user_contract("${suffix}" SymbolSys src/SymbolSys.cpp)
+    add_user_contract("${suffix}" RSymbolSys src/RSymbolSys.cpp)
 endfunction(add)
 
 conditional_add()

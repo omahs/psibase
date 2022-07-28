@@ -4,6 +4,7 @@
 #include <contracts/user/symbolErrors.hpp>
 #include <contracts/user/symbolTables.hpp>
 #include <psibase/Contract.hpp>
+#include <psibase/Rpc.hpp>
 #include <psibase/Table.hpp>
 #include <string_view>
 
@@ -33,13 +34,13 @@ namespace UserContract
 
       SymbolRecord       getSymbol(SID symbol);
       bool               exists(SID symbol);
-      Quantity           getPrice(size_t numChars);
-      SymbolLengthRecord getSymbolType(size_t numChars);
+      Quantity           getPrice(uint8_t numChars);
+      SymbolLengthRecord getSymbolType(uint8_t numChars);
 
       void updatePrices();
 
      private:
-      tables db{contract};
+      Tables db{contract};
 
      public:
       struct Events
