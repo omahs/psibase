@@ -1,6 +1,8 @@
 #include <contracts/system/AccountSys.hpp>
+#include <contracts/system/ProxySys.hpp>
 #include <contracts/system/TransactionSys.hpp>
 #include <contracts/system/commonErrors.hpp>
+#include <contracts/user/RSymbolSys.hpp>
 #include <contracts/user/SymbolSys.hpp>
 #include <psibase/dispatch.hpp>
 
@@ -89,6 +91,9 @@ void SymbolSys::init()
    at<NftSys>().credit(symbolOwnerNft.ownerNft, TokenSys::contract,
                        "System token symbol ownership nft");
    at<TokenSys>().mapSymbol(TokenSys::sysToken, sysTokenSymbol);
+
+   // Register proxy
+   at<ProxySys>().registerServer(RSymbolSys::contract);
 
    emit().ui().initialized();
 }

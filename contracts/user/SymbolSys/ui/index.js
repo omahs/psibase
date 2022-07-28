@@ -1,3 +1,21 @@
+import htm from "/common/htm.module.js";
+const { useEffect, useState, useCallback, useRef } = React;
+import {
+  initializeApplet,
+  getJson,
+  action,
+  addRoute,
+  push,
+  getLocalResource,
+  CommonResources,
+} from "/common/rpc.mjs";
+
+const html = htm.bind(React.createElement);
+
+await initializeApplet();
+
+export const thisApplet = await getJson("/common/thiscontract");
+
 function App() {
   const [user, setUser] = useState("");
 
