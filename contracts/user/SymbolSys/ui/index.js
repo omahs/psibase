@@ -153,7 +153,7 @@ function CreatePanel() {
   return html`
     <${Form} onSubmit=${onSendSubmit}>
       <${Form.Field}>
-        <${Input} fluid name='newSymbol' label='New Symbol:' placeholder='BTC' defaultValue='${form.newSymbol}' onChange=${onChangeForm}/>
+        <${Input} fluid name='newSymbol' label='New Symbol:' placeholder='btc' defaultValue='${form.newSymbol}' onChange=${onChangeForm}/>
       </${Form.Field}>
       <${Form.Field}>
         <${Input} fluid name='maxDebit' label='Max Debit:' placeholder='1000' defaultValue='${form.maxDebit}' onChange=${onChangeForm}/>
