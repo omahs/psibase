@@ -57,7 +57,7 @@ SCENARIO("Testing default psibase chain")
    // Distribute a few tokens
    auto userBalance = 1'000'000e8;
    sysIssuer.mint(sysToken, userBalance, memo);
-   sysIssuer.credit(sysToken, alice, 1'000e8, memo);
+   sysIssuer.credit(sysToken, alice, 5'000e8, memo);
    sysIssuer.credit(sysToken, bob, 1'000e8, memo);
 
    auto create = alice.at<TokenSys>().create(4, 1'000'000e4);

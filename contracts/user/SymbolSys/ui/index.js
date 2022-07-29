@@ -109,11 +109,11 @@ function EmptyPanel() {
   `;
 }
 
-const EMPTY_MESSAGE = { message: "", type: "positive" };
+const EMPTY_MESSAGE = { content: "", color: "" };
 
-function GetMessage({ type, message }) {
-  if (message) {
-    return html` <${Message} ${type} header="" content=${message} /> `;
+function GetMessage({ color, content }) {
+  if (content) {
+    return html` <${Message} color=${color} header="" content=${content} /> `;
   } else return html``;
 }
 
@@ -132,23 +132,41 @@ function CreatePanel() {
     setMessage(EMPTY_MESSAGE);
 
     const create = async () => {
-      const actionData = {
-        newSymbol: form.newSymbol,
-        maxDebit: { value: parseInt(form.maxDebit) },
+      console.info(thisApplet);
+      const amount = { value: parseInt(form.maxDebit) };
+      const creditTokenActionData = {
+        tokenId: 1,
+        receiver: thisApplet,
+        amount,
+        memo: { contents: "Credit to create a new Symbol" },
       };
-      console.info(actionData);
+      const createSymbolActionData = {
+        newSymbol: form.newSymbol,
+        maxDebit: amount,
+      };
+      console.info(creditTokenActionData, createSymbolActionData);
 
       push(transactionTypes.create, [
-        await action(thisApplet, "create", actionData),
+        await action("token-sys", "credit", creditTokenActionData),
+        await action(thisApplet, "create", createSymbolActionData),
       ]);
     };
 
     // TODO: failing trxs are swallowing the error code
     create().catch((e) => {
       console.error(e);
-      setMessage({ type: "negative", message: e.message || e.toString() });
+      setMessage({ color: "red", content: e.message || e.toString() });
     });
   };
+
+  const symCreated = useCallback(async (payload) => {
+    console.info("symCreated >>> ", payload);
+    setMessage({ color: "green", content: "Symbol created successfully!" });
+  }, []);
+
+  useEffect(() => {
+    addRoute("symCreated", transactionTypes.create, symCreated);
+  }, [symCreated]);
 
   return html`
     <${Form} onSubmit=${onSendSubmit}>
@@ -156,13 +174,13 @@ function CreatePanel() {
         <${Input} fluid name='newSymbol' label='New Symbol:' placeholder='btc' defaultValue='${form.newSymbol}' onChange=${onChangeForm}/>
       </${Form.Field}>
       <${Form.Field}>
-        <${Input} fluid name='maxDebit' label='Max Debit:' placeholder='1000' defaultValue='${form.maxDebit}' onChange=${onChangeForm}/>
+        <${Input} fluid name='maxDebit' label='Max Debit:' placeholder='100000000000' defaultValue='${form.maxDebit}' onChange=${onChangeForm}/>
       </${Form.Field}>
       <${Form.Field}>
         <${Button} primary type="submit">Send</${Button}>
       </${Form.Field}>
     </${Form}>
-    <${GetMessage} ${message} />
+    <${GetMessage} color=${message.color} content=${message.content} />
   `;
 }
 
