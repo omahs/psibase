@@ -197,6 +197,13 @@ function Dashboard() {
                 contract: "token-sys",
                 color: "blue",
             },
+            {
+              title: "Symbols",
+              description:
+                "Create a new Token Symbol. View existing symbols created on the chain.",
+              contract: "symbol-sys",
+              color: "brown",
+            },
         ]
     );
 
