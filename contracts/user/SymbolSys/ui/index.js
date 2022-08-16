@@ -1,7 +1,7 @@
 import htm from "/common/htm.module.js";
 import {
   initializeApplet,
-  getJson,
+  getCurrentApplet,
   action,
   addRoute,
   push,
@@ -17,7 +17,7 @@ const html = htm.bind(React.createElement);
 
 await initializeApplet();
 
-export const thisApplet = await getJson("/common/thiscontract");
+export const thisApplet = await getCurrentApplet();
 
 const transactionTypes = {
   create: 0,

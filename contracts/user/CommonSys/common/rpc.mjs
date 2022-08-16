@@ -48,6 +48,10 @@ export async function getJson(url) {
     return await (await get(url)).json();
 }
 
+export async function getCurrentApplet() {
+    return getJson("/common/thiscontract");
+}
+
 export async function postText(url, text) {
     return await throwIfError(await fetch(url, {
         method: 'POST',
