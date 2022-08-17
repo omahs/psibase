@@ -38,7 +38,7 @@ SCENARIO("Testing default psibase chain")
    auto        symbolSysRpc   = t.as(RSymbolSys::contract).at<RSymbolSys>();
    std::string symbolRpcUiDir = "../contracts/user/SymbolSys/ui/";
    symbolSysRpc.storeSys("/ui/index.js", "text/javascript",
-                         read_whole_file(symbolRpcUiDir + "index.js"));
+                         readWholeFile(symbolRpcUiDir + "index.js"));
 
    auto alice = t.as(t.add_account("alice"_a));
    auto bob   = t.as(t.add_account("bob"_a));

@@ -6,6 +6,7 @@
 #include <psibase/Contract.hpp>
 #include <psibase/Rpc.hpp>
 #include <psibase/Table.hpp>
+#include <psibase/serveContent.hpp>
 #include <string_view>
 
 #include "contracts/user/tokenTypes.hpp"
@@ -40,7 +41,7 @@ namespace UserContract
       void updatePrices();
 
      private:
-      Tables db{contract};
+      tables db{contract};
 
      public:
       struct Events

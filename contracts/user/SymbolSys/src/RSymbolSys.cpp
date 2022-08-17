@@ -20,13 +20,12 @@ namespace
    {
       auto d = string("<html><div>" + str + "</div></html>");
 
-      return RpcReplyData{.contentType = "text/html",
-                          .body        = std::vector<char>{d.begin(), d.end()}};
+      return HttpReply{.contentType = "text/html", .body = std::vector<char>{d.begin(), d.end()}};
    };
 
 }
 
-optional<RpcReplyData> RSymbolSys::serveSys(RpcRequestData request)
+optional<HttpReply> RSymbolSys::serveSys(HttpRequest request)
 {
    if (auto result = at<system_contract::CommonSys>().serveCommon(request).unpack())
       return result;
@@ -34,7 +33,7 @@ optional<RpcReplyData> RSymbolSys::serveSys(RpcRequestData request)
    if (auto result = servePackAction<SymbolSys>(request))
       return result;
 
-   if (auto result = serveContent(request, SymbolSys::Tables{getReceiver()}))
+   if (auto result = serveContent(request, Tables{getReceiver()}))
       return result;
 
    if (auto result = _serveRestEndpoints(request))
@@ -51,12 +50,12 @@ void RSymbolSys::storeSys(string path, string contentType, vector<char> content)
    storeContent(move(path), move(contentType), move(content), Tables{getReceiver()});
 }
 
-std::optional<RpcReplyData> RSymbolSys::_serveRestEndpoints(RpcRequestData& request)
+std::optional<HttpReply> RSymbolSys::_serveRestEndpoints(HttpRequest& request)
 {
    auto to_json = [](const auto& obj)
    {
       auto json = psio::convert_to_json(obj);
-      return RpcReplyData{
+      return HttpReply{
           .contentType = "application/json",
           .body        = {json.begin(), json.end()},
       };
