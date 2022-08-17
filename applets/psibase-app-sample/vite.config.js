@@ -10,8 +10,9 @@ export default defineConfig({
             '/': {
                 target: 'http://psibase.127.0.0.1.sslip.io:8080/',
                 bypass: (req, _res, _opt) => {
-                    if (req.headers.host && req.headers.host.split(".")[0] === APPLET_CONTRACT) {
-                        console.info(">>>", req.url, req.headers);
+                    const host = req.headers.host || ""
+                    const subdomain = host.split(".")[0]
+                    if (subdomain === APPLET_CONTRACT) {
                         return req.url;
                     }
                 }
