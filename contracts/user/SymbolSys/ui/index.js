@@ -1,12 +1,13 @@
 import htm from "/common/htm.module.js";
 import {
-  initializeApplet,
+  // initializeApplet,
   getCurrentApplet,
   action,
-  addRoute,
-  push,
-  getLocalResource,
-  CommonResources,
+  // addRoute,
+  // push,
+  query,
+  // getLocalResource,
+  // CommonResources,
 } from "/common/rpc.mjs";
 
 const { useEffect, useState, useCallback, useRef } = React;
@@ -146,10 +147,10 @@ function CreatePanel() {
       };
       console.info(creditTokenActionData, createSymbolActionData);
 
-      push(transactionTypes.create, [
-        await action("token-sys", "credit", creditTokenActionData),
-        await action(thisApplet, "create", createSymbolActionData),
-      ]);
+      // push(transactionTypes.create, [
+      //   await action("token-sys", "credit", creditTokenActionData),
+      //   await action(thisApplet, "create", createSymbolActionData),
+      // ]);
     };
 
     // TODO: failing trxs are swallowing the error code
@@ -164,9 +165,9 @@ function CreatePanel() {
     setMessage({ color: "green", content: "Symbol created successfully!" });
   }, []);
 
-  useEffect(() => {
-    addRoute("symCreated", transactionTypes.create, symCreated);
-  }, [symCreated]);
+  // useEffect(() => {
+  //   addRoute("symCreated", transactionTypes.create, symCreated);
+  // }, [symCreated]);
 
   return html`
     <${Form} onSubmit=${onSendSubmit}>
@@ -206,7 +207,8 @@ function App() {
     // Todo - Timeout is used because sometimes the window.parentIFrame isn't loaded yet when
     //  this runs. Should use a better fix for the race condition than a delay.
     setTimeout(() => {
-      getLocalResource(CommonResources.loggedInUser, setUser);
+      // getLocalResource(CommonResources.loggedInUser, setUser);
+      query("account-sys", "", "getLoggedInUser", {}, setUser);
     }, 50);
   }, []);
 
