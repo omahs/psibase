@@ -1,29 +1,18 @@
 import { useEffect, useState } from "react";
+
+import { test } from "./psibase-rpc";
+
 import reactLogo from "./assets/react.svg";
 import "./App.css";
 
-const rpc = globalThis.psibaseRpc;
-
-rpc.initializeApplet();
-
-console.log("Initialized Applet", await rpc.getCurrentApplet());
-
-function App() {
+export const App = () => {
   const [count, setCount] = useState(0);
   const [tokenTypes, setTokenTypes] = useState<any>({});
 
   useEffect(() => {
     const x = async () => {
-      const testSiblingUrl = await rpc.siblingUrl(
-        undefined,
-        "token-sys",
-        "getTokenTypes"
-      );
-      console.info("test sibling url >>>", testSiblingUrl);
-
-      const tokenTypes = await rpc.getJson(testSiblingUrl);
-      console.info("token types >>>", tokenTypes);
-      setTokenTypes(tokenTypes);
+      const tt = await test();
+      setTokenTypes(tt);
     };
     x();
   }, []);
@@ -38,7 +27,7 @@ function App() {
           <img src={reactLogo} className="logo react" alt="React logo" />
         </a>
       </div>
-      <h1>Vite + React5</h1>
+      <h1>Vite + React</h1>
       <div className="card">
         <button onClick={() => setCount((count) => count + 1)}>
           count is {count}
@@ -53,6 +42,4 @@ function App() {
       </p>
     </div>
   );
-}
-
-export default App;
+};

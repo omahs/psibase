@@ -27,8 +27,11 @@ namespace
 
 optional<HttpReply> RSymbolSys::serveSys(HttpRequest request)
 {
-   if (auto result = at<system_contract::CommonSys>().serveCommon(request).unpack())
+   if (auto result = psibase::serveSimpleUI<SymbolSys, false>(request))
       return result;
+
+   // if (auto result = at<system_contract::CommonSys>().serveCommon(request).unpack())
+   //    return result;
 
    if (auto result = servePackAction<SymbolSys>(request))
       return result;

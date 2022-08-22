@@ -36,9 +36,15 @@ SCENARIO("Testing default psibase chain")
    tokenSysRpc.storeSys("/ui/index.js", "text/javascript", readWholeFile(rpcUiDir + "index.js"));
 
    auto        symbolSysRpc   = t.as(RSymbolSys::contract).at<RSymbolSys>();
-   std::string symbolRpcUiDir = "../contracts/user/SymbolSys/ui/";
-   symbolSysRpc.storeSys("/ui/index.js", "text/javascript",
-                         readWholeFile(symbolRpcUiDir + "index.js"));
+   std::string symbolRpcUiDir = "../contracts/user/SymbolSys/ui/symbol-sys/dist/";
+   symbolSysRpc.storeSys("/index.html", "text/html", readWholeFile(symbolRpcUiDir + "index.html"));
+   symbolSysRpc.storeSys("/assets/index.c26d6879.js", "text/javascript",
+                         readWholeFile(symbolRpcUiDir + "assets/index.c26d6879.js"));
+   symbolSysRpc.storeSys("/vite.svg", "image/svg+xml", readWholeFile(symbolRpcUiDir + "vite.svg"));
+   symbolSysRpc.storeSys("/assets/react.35ef61ed.svg", "image/svg+xml",
+                         readWholeFile(symbolRpcUiDir + "assets/react.35ef61ed.svg"));
+   symbolSysRpc.storeSys("/assets/index.287b59a6.css", "text/css",
+                         readWholeFile(symbolRpcUiDir + "assets/index.287b59a6.css"));
 
    auto alice = t.as(t.add_account("alice"_a));
    auto bob   = t.as(t.add_account("bob"_a));
@@ -57,7 +63,7 @@ SCENARIO("Testing default psibase chain")
    // Distribute a few tokens
    auto userBalance = 1'000'000e8;
    sysIssuer.mint(sysToken, userBalance, memo);
-   sysIssuer.credit(sysToken, alice, 5'000e8, memo);
+   sysIssuer.credit(sysToken, alice, 9'000e8, memo);
    sysIssuer.credit(sysToken, bob, 1'000e8, memo);
 
    auto create = alice.at<TokenSys>().create(4, 1'000'000e4);
@@ -80,5 +86,7 @@ SCENARIO("Testing default psibase chain")
    psibase::execute("rm -rf tester_psinode_db");
    psibase::execute("mkdir tester_psinode_db");
    psibase::execute("cp -a " + t.getPath() + "/. tester_psinode_db/");
-   psibase::execute("psinode --slow -o psibase.127.0.0.1.sslip.io tester_psinode_db --producer testchain --prods testchain");
+   psibase::execute(
+       "psinode --slow -o psibase.127.0.0.1.sslip.io tester_psinode_db --producer testchain "
+       "--prods testchain");
 }
