@@ -166,6 +166,11 @@ export const useApplets = () => {
                         payload.callbackId = storeCallback(
                             // @ts-ignore
                             ({ sender: responseApplet, response, errors }) => {
+                                console.info(
+                                    "Received response from applet: ",
+                                    receiver,
+                                    responseApplet
+                                );
                                 if (!responseApplet.equals(receiver)) {
                                     return;
                                 }

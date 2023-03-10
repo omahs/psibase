@@ -359,7 +359,7 @@ export class AppletId {
     }
 
     toString() {
-        return this.fullPath;
+        return this.name; // this.fullPath;
     }
 
     get fullPath() {

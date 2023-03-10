@@ -10,12 +10,10 @@ export const getIframeId = (appletId: AppletId) => {
     // Do more than one iFrame of the same appletStr/subPath ever need to be opened simultaneously?
     //    If so, this method needs to change to add a refCount to the ID or something, to ensure the IDs
     //    are unique.
-    const escapedId = (
-        "applet_" +
-        appletId.name +
-        "_" +
-        appletId.subPath
-    ).replace(/([^a-zA-Z0-9_-]+)/gi, "_");
+    const escapedId = ("applet_" + appletId.name + "_")
+        // +
+        // appletId.subPath
+        .replace(/([^a-zA-Z0-9_-]+)/gi, "_");
     return escapedId;
 };
 
@@ -40,8 +38,10 @@ export const constructTransaction = async (actions: any) => {
 
 export function getAppletInURL() {
     const pathname = window.location.pathname;
-    var fullPath = pathname.substring(appletPrefix.length);
-    return AppletId.fromFullPath(fullPath);
+    const fullPath = pathname.substring(appletPrefix.length);
+    const fullAppletId = AppletId.fromFullPath(fullPath);
+    console.info("loaded fullAppletId", fullAppletId);
+    return new AppletId(fullAppletId.name);
 }
 
 export function makeAction(

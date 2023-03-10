@@ -40,12 +40,17 @@ export const Applet = ({ applet, handleMessage }: Props) => {
     useEffect(() => {
         const doSetAppletSrc = async () => {
             let url = await appletId.url();
+            console.info("setappletsrc", url, window.location);
 
             // If we're on the applet page, add the query params to the applet url
             if (window.location.pathname.startsWith(`/applet/${appletId}`)) {
+                url += window.location.pathname.substring(
+                    `/applet/${appletId}`.length + 1
+                );
                 const queryParams = window.location.search;
                 url += queryParams;
             }
+            console.info("url >>> ", url);
 
             setAppletSrc(url);
         };
